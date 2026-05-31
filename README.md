@@ -363,6 +363,10 @@ See the [LICENSE](LICENSE) file for details.
 - Official Spring Boot Documentation: https://spring.io/projects/spring-boot
 - Spring Cloud Documentation: https://spring.io/projects/spring-cloud
 
+### Public APIs
+- ViaCEP API: https://viacep.com.br/
+Thank you Leandro Zanuz!
+
 ### Technologies
 - [OpenAPI / Swagger](https://swagger.io/)
 - [MongoDB Documentation](https://docs.mongodb.com/)
