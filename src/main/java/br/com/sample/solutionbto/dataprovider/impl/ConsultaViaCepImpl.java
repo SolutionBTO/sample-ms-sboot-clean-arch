@@ -4,6 +4,7 @@ import br.com.sample.solutionbto.core.dataprovider.ConsultaViaCep;
 import br.com.sample.solutionbto.core.domain.EnderecoCompletoDomain;
 import br.com.sample.solutionbto.dataprovider.mapper.EnderecoCompletoDomainMapper;
 import br.com.sample.solutionbto.dataprovider.integration.ViaCepFeign;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.text.Normalizer;
@@ -11,20 +12,16 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Component
+@RequiredArgsConstructor
 public class ConsultaViaCepImpl implements ConsultaViaCep {
 
     private final ViaCepFeign viaCepFeign;
     private final EnderecoCompletoDomainMapper mapper;
 
-    public ConsultaViaCepImpl(ViaCepFeign viaCepFeign, EnderecoCompletoDomainMapper mapper) {
-        this.viaCepFeign = viaCepFeign;
-        this.mapper = mapper;
-    }
-
     @Override
     public EnderecoCompletoDomain consultaCep(String cep) {
         var enderecoCompletoDto = viaCepFeign.consultaViaCep(cep);
-        return mapper.map(enderecoCompletoDto);
+        return mapper.map(enderecoCompletoDto.getBody());
     }
 
     @Override
@@ -34,7 +31,7 @@ public class ConsultaViaCepImpl implements ConsultaViaCep {
                 sanetizarTexto(localidade),
                 sanetizarTexto(logradouro));
 
-        return mapper.map(enderecoCompletosDto);
+        return mapper.map(enderecoCompletosDto.getBody());
     }
 
     public static String sanetizarTexto(String texto) {

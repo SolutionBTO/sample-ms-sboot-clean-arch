@@ -37,7 +37,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EnderecoCompleto'
+                $ref: '#/components/schemas/EnderecoCompletoClientDto'
         '400':
           description: "Bad Request. O CEP informado possui formato inválido (ex: alfanumérico, quantidade incorreta de caracteres)."
   /{uf}/{localidade}/{logradouro}/json:
@@ -81,12 +81,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/EnderecoCompleto'
+                  $ref: '#/components/schemas/EnderecoCompletoClientDto'
         '400':
           description: Bad Request. Ocorre quando a localidade ou logradouro possuem menos de 3 caracteres.
 components:
   schemas:
-    EnderecoCompleto:
+    EnderecoCompletoClientDto:
       type: object
       properties:
         cep:

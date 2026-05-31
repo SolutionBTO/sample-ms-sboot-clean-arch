@@ -3,7 +3,8 @@ package br.com.sample.solutionbto.entrypoint.controller;
 import br.com.sample.solutionbto.core.usecase.ConsultaCepUsecase;
 import br.com.sample.solutionbto.entrypoint.controller.mapper.EnderecoCompletoDtoMapper;
 import br.com.sample.solutionbto.openapi.api.ConsultaCepApi;
-import br.com.sample.solutionbto.openapi.model.EnderecoCompleto;
+import br.com.sample.solutionbto.openapi.model.EnderecoCompletoDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,18 +17,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1")
 @Slf4j
+@RequiredArgsConstructor
 public class ConsultaCepController implements ConsultaCepApi {
 
     private final ConsultaCepUsecase usecase;
     private final EnderecoCompletoDtoMapper mapper;
 
-    public ConsultaCepController(ConsultaCepUsecase usecase, EnderecoCompletoDtoMapper mapper) {
-        this.usecase = usecase;
-        this.mapper = mapper;
-    }
-
     @Override
-    public ResponseEntity<EnderecoCompleto> consultaCep(String cep) {
+    public ResponseEntity<EnderecoCompletoDto> consultaCep(String cep) {
         var endereco = usecase.consultaCep(cep);
 
         return Optional.ofNullable(endereco)
@@ -38,7 +35,7 @@ public class ConsultaCepController implements ConsultaCepApi {
     }
 
     @Override
-    public ResponseEntity<List<EnderecoCompleto>> pesquisaCepPorEndereco(String uf, String localidade, String logradouro) {
+    public ResponseEntity<List<EnderecoCompletoDto>> pesquisaCepPorEndereco(String uf, String localidade, String logradouro) {
         var enderecos = usecase.pesquisaCepPorEndereco(uf, localidade, logradouro);
         return enderecos.isEmpty() ?
                 ResponseEntity.noContent().build() :

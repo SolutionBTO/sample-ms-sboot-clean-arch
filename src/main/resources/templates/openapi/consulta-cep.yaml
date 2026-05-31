@@ -32,7 +32,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EnderecoCompleto'
+                $ref: '#/components/schemas/EnderecoCompletoDto'
         '204':
           description: "Sem conteúdo."
           content:
@@ -82,7 +82,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/EnderecoCompleto'
+                  $ref: '#/components/schemas/EnderecoCompletoDto'
         '204':
           description: "Sem conteúdo."
           content:
@@ -93,7 +93,7 @@ paths:
           description: Bad Request. Ocorre quando a localidade ou logradouro possuem menos de 3 caracteres.
 components:
   schemas:
-    EnderecoCompleto:
+    EnderecoCompletoDto:
       type: object
       properties:
         cep:

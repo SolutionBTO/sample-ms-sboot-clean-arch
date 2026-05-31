@@ -246,11 +246,48 @@
                                 <!-- Generates default methods on interfaces so you do not have to override everything -->
                                 <defaultInterfaces>true</defaultInterfaces>
                                 <apiNameSuffix>Api</apiNameSuffix>        <!-- API class suffix -->
-                                <modelNameSuffix>DTO</modelNameSuffix>    <!-- Model class suffix -->
+                                <!--<modelNameSuffix>Dto</modelNameSuffix>     Model class suffix -->
                             </configOptions>
                         </configuration>
                     </execution>
 
+                    <execution>
+                        <id>viacep-integration</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>
+                                ${project.basedir}/src/main/resources/templates/openapi/viacep-integration.yaml
+                            </inputSpec>
+                            <generatorName>spring</generatorName>
+                            <apiPackage>br.com.sample.solutionbto.openapi.integration.api</apiPackage>
+                            <modelPackage>br.com.sample.solutionbto.openapi.integration.model</modelPackage>
+                            <supportingFilesToGenerate>
+                                ApiUtil.java
+                            </supportingFilesToGenerate>
+                            <configOptions>
+                                <!-- Use Jakarta EE instead of Javax (Required for Spring Boot 3+) -->
+                                <useJakartaEe>true</useJakartaEe>
+                                <!-- Generate Spring Boot 3 compatible code -->
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <!-- Only generate interfaces/DTOs without placeholder controller implementations -->
+                                <interfaceOnly>true</interfaceOnly>
+                                <!-- Add Java Bean Validation annotations like @NotNull and @Valid -->
+                                <useBeanValidation>true</useBeanValidation>
+                                <!-- Generate native Spring WebMvc tags, set false for WebFlux/Reactive -->
+                                <reactive>false</reactive>
+                                <!-- Use modern java.time types (OffsetDateTime) instead of java.util.Date -->
+                                <dateLibrary>java8</dateLibrary>
+                                <!-- Forces tags to dictate class names instead of path groupings -->
+                                <useTags>true</useTags>
+                                <!-- Generates default methods on interfaces so you do not have to override everything -->
+                                <defaultInterfaces>true</defaultInterfaces>
+                                <apiNameSuffix>ClientApi</apiNameSuffix>        <!-- API class suffix -->
+                                <!--<modelNameSuffix>ClientDto</modelNameSuffix>     Model class suffix -->
+                            </configOptions>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
