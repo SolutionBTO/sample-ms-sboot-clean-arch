@@ -1,0 +1,162 @@
+openapi: 3.0.3
+info:
+  title: Consulta CEP API
+  description: |
+    API demonstra consulta de CEP integrando com o serviço ViaCEP, um webservice gratuito de alto desempenho para consulta de Códigos de Endereçamento Postal (CEP) do Brasil.
+    A API é pública, possui CORS ativo e não necessita de chaves de autenticação
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1/
+tags:
+  - name: "Consulta CEP"
+paths:
+  /consulta-cep/{cep}:
+    get:
+      tags:
+        - "Consulta CEP"
+      summary: Consulta de CEP direta
+      description: Retorna os dados cadastrais do endereço a partir de um CEP válido com 8 dígitos.
+      operationId: consultaCep
+      parameters:
+        - name: cep
+          in: path
+          required: true
+          description: "O CEP a ser pesquisado (apenas os 8 dígitos numéricos, ex: `01001000`)."
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+            example: '01001000'
+      responses:
+        '200':
+          description: "Operação bem-sucedida. Nota: Caso o CEP possua formato válido mas não exista, a resposta virá com um corpo contendo `{\"erro\": true}`."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnderecoCompleto'
+        '204':
+          description: "Sem conteúdo."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErroCepNaoEncontrado'
+        '400':
+          description: "Bad Request. O CEP informado possui formato inválido (ex: alfanumérico, quantidade incorreta de caracteres)."
+  /consulta-cep/uf/{uf}/municipio/{localidade}/logradouro/{logradouro}:
+    get:
+      tags:
+        - "Consulta CEP"
+      summary: Pesquisa de CEP por endereço (Busca Reversa)
+      description: Permite localizar CEPs informando o Estado (UF), Município/Cidade e o nome ou parte do logradouro (Rua, Av, etc).
+      operationId: pesquisaCepPorEndereco
+      parameters:
+        - name: uf
+          in: path
+          required: true
+          description: Sigla da Unidade da Federação (Estado).
+          schema:
+            type: string
+            minLength: 2
+            maxLength: 2
+            example: 'SP'
+        - name: localidade
+          in: path
+          required: true
+          description: Nome do Município/Cidade (mínimo de 3 caracteres).
+          schema:
+            type: string
+            minLength: 3
+            example: 'Sao Paulo'
+        - name: logradouro
+          in: path
+          required: true
+          description: Nome ou trecho do logradouro/rua (mínimo de 3 caracteres). Espaços podem ser substituídos por `+`.
+          schema:
+            type: string
+            minLength: 3
+            example: 'Avenida Paulista'
+      responses:
+        '200':
+          description: Lista de endereços encontrados que correspondem aos critérios (limite máximo de 50 resultados). Se nenhum for encontrado, retorna uma lista vazia `[]`.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EnderecoCompleto'
+        '204':
+          description: "Sem conteúdo."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErroCepNaoEncontrado'
+        '400':
+          description: Bad Request. Ocorre quando a localidade ou logradouro possuem menos de 3 caracteres.
+components:
+  schemas:
+    EnderecoCompleto:
+      type: object
+      properties:
+        cep:
+          type: string
+          description: Código de Endereçamento Postal formatado com hífen.
+          example: '01001-000'
+        logradouro:
+          type: string
+          description: Nome da rua, avenida, praça, etc.
+          example: 'Praça da Sé'
+        complemento:
+          type: string
+          description: Informações adicionais do endereço (lado par/ímpar, prédios, etc).
+          example: 'lado ímpar'
+        unidade:
+          type: string
+          description: Código identificador de unidade (geralmente vazio).
+          example: ''
+        bairro:
+          type: string
+          description: Bairro ou distrito onde se localiza o logradouro.
+          example: 'Sé'
+        localidade:
+          type: string
+          description: Nome do município (Cidade).
+          example: 'São Paulo'
+        uf:
+          type: string
+          description: Sigla do Estado.
+          example: 'SP'
+        estado:
+          type: string
+          description: Nome completo do Estado.
+          example: 'São Paulo'
+        regiao:
+          type: string
+          description: Região geográfica do país.
+          example: 'Sudeste'
+        ibge:
+          type: string
+          description: Código identificador do município no IBGE (7 dígitos).
+          example: '3550308'
+        gia:
+          type: string
+          description: Guia de Informação e Apuração do ICMS (utilizado em SP).
+          example: '1004'
+        ddd:
+          type: string
+          description: Código de Discagem Direta a Distância telefônico da região.
+          example: '11'
+        siafi:
+          type: string
+          description: Código do município no Sistema Integrado de Administração Financeira do Governo Federal.
+          example: '7107'
+        erro:
+          type: boolean
+          example: true
+
+    ErroCepNaoEncontrado:
+      type: object
+      description: Resposta retornada quando o CEP pesquisado tem formato válido porém não existe na base de dados nacional.
+      properties:
+        descricao:
+          type: string
+          description: Mensagem de erro explicativa.
+          example: "CEP não encontrado."
