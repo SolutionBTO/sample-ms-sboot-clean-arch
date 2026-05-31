@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -29,9 +30,11 @@ public class ConsultaCepController implements ConsultaCepApi {
     public ResponseEntity<EnderecoCompleto> consultaCep(String cep) {
         var endereco = usecase.consultaCep(cep);
 
-        return endereco.getErro() != null && endereco.getErro() ?
-                    ResponseEntity.noContent().build() :
-                    ResponseEntity.ok(mapper.map(endereco));
+        return Optional.ofNullable(endereco)
+                            .filter(e -> e.getErro() == null || e.getErro() == Boolean.FALSE)
+                            .map(mapper::map)
+                            .map(ResponseEntity::ok)
+                            .orElse(ResponseEntity.noContent().build());
     }
 
     @Override

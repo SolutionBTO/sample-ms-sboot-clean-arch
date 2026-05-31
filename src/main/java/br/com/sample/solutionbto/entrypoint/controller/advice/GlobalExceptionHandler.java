@@ -1,6 +1,7 @@
 package br.com.sample.solutionbto.entrypoint.controller.advice;
 
 import br.com.sample.solutionbto.entrypoint.controller.advice.dto.ErrorResponseDto;
+import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -110,5 +111,22 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ErrorResponseDto> handleFeignException(
+            FeignException ex, WebRequest request) {
+
+        log.error("Error calling external service: {}", ex.getMessage());
+
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .timestamp(LocalDateTime.now())
+                .status(ex.status())
+                .error("External Service Error")
+                .message(ex.getMessage())
+                .path(request.getDescription(false).replace("uri=", ""))
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.valueOf(ex.status()));
     }
 }
