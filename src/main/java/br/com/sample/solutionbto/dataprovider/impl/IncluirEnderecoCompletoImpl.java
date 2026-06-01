@@ -17,7 +17,7 @@ public class IncluirEnderecoCompletoImpl implements IncluirEnderecoCompleto {
 
     @Override
     public void persistir(EnderecoCompletoDomain enderecoCompletoDomain) {
-        var document = mapper.mapToDocument(enderecoCompletoDomain);
+        var document = mapper.map(enderecoCompletoDomain);
         repository.save(document);
     }
 }

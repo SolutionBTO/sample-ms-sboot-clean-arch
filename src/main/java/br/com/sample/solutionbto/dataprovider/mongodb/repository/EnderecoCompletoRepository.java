@@ -5,10 +5,11 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EnderecoCompletoRepository extends MongoRepository<EnderecoCompletoDocument, ObjectId> {
 
-     EnderecoCompletoDocument findByCep(String cep);
+     Optional<EnderecoCompletoDocument> findByCep(String cep);
 
      List<EnderecoCompletoDocument> findByUfAndLocalidadeAndLogradouro(String uf, String localidade, String logradouro);
 }

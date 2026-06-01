@@ -28,7 +28,7 @@ public class ConsultaCepController implements ConsultaCepApi {
         var endereco = usecase.consultaCep(cep);
 
         return Optional.ofNullable(endereco)
-                            .filter(e -> e.getErro() == null || e.getErro() == Boolean.FALSE)
+                            .filter(e -> e.getErro() == null || !e.getErro())
                             .map(mapper::map)
                             .map(ResponseEntity::ok)
                             .orElse(ResponseEntity.noContent().build());
