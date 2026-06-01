@@ -19,7 +19,7 @@ public class CadastroCepListener {
     private final ObjectMapper objectMapper;
     private final IncluirEnderecoCompletoUsecase usecase;
 
-    @RabbitListener(queues = "${app.rabbitmq.queue.name}", concurrency = "1-5")
+    @RabbitListener(queues = "${app.rabbitmq.queue-name}", concurrency = "1-5")
     public void receiveMessage(Message message) throws JsonProcessingException {
         // Process the received message (e.g., save to database, call another service, etc.)
         var messageBody = new String(message.getBody(), StandardCharsets.UTF_8);

@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
             MethodArgumentTypeMismatchException ex, WebRequest request) {
         
         String message = String.format("Parameter '%s' should be of type %s",
-                ex.getName(), ex.getRequiredType().getSimpleName());
+                ex.getName(), ex.getRequiredType());
 
         log.warn("Type mismatch error: {}", message);
 

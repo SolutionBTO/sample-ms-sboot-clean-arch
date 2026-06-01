@@ -1,5 +1,6 @@
 package br.com.sample.solutionbto.dataprovider.impl;
 
+import br.com.sample.solutionbto.common.util.StringUtils;
 import br.com.sample.solutionbto.core.dataprovider.ConsultaViaCep;
 import br.com.sample.solutionbto.core.domain.EnderecoCompletoDomain;
 import br.com.sample.solutionbto.dataprovider.mapper.EnderecoCompletoDomainMapper;
@@ -8,9 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
-import java.text.Normalizer;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
@@ -31,23 +30,9 @@ public class ConsultaViaCepImpl implements ConsultaViaCep {
     public List<EnderecoCompletoDomain> pesquisaCepPorEndereco(String uf, String localidade, String logradouro) {
         var enderecoCompletosDto = viaCepFeign.pesquisaViaCepPorEndereco(
                 uf,
-                sanetizarTexto(localidade),
-                sanetizarTexto(logradouro));
+                StringUtils.sanetizarTexto(localidade, true),
+                StringUtils.sanetizarTexto(logradouro, true));
 
         return mapper.map(enderecoCompletosDto.getBody());
-    }
-
-    public static String sanetizarTexto(String texto) {
-        if (texto == null) {
-            return null;
-        }
-        // 1. Normaliza o texto para decompor os caracteres e seus acentos (NFD)
-        String normalizado = Normalizer.normalize(texto, Normalizer.Form.NFD);
-        // 2. Remove todos os caracteres que não estão na faixa ASCII (remove os acentos)
-        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        String semAcentos = pattern.matcher(normalizado).replaceAll("");
-        // 3. Substitui qualquer caractere especial restante (e.g., pontos, traços, @) por vazio
-        // Apenas letras (a-z, A-Z), números (0-9) e espaços são permitidos.
-        return semAcentos.replaceAll("[^a-zA-Z0-9 ]", "").replaceAll("\\s", "%20");
     }
 }

@@ -1,5 +1,7 @@
 package br.com.sample.solutionbto.config;
 
+import br.com.sample.solutionbto.common.properties.RabbitMQProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -9,30 +11,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty(name = "app.rabbitmq.enabled", havingValue = "true")
+@RequiredArgsConstructor
+@ConditionalOnProperty(name = "app.rabbitmq.local-enabled", havingValue = "true")
 public class RabbitMQLocalConfig {
 
-    // Exchange name
-    public static final String EXCHANGE_NAME = "cadastro-cep.exchange";
-
-    // Queue name
-    public static final String QUEUE_NAME = "cadastro-cep.queue";
-
-    // Routing key
-    public static final String ROUTING_KEY = "cadastro-cep.key";
+    private final RabbitMQProperties rabbitMQProperties;
 
     @Bean
     public DirectExchange exchange() {
-        return new DirectExchange(EXCHANGE_NAME, true, false);
+        return new DirectExchange(rabbitMQProperties.getExchangeName(), true, false);
     }
 
     @Bean
     public Queue queue() {
-        return new Queue(QUEUE_NAME, true);
+        return new Queue(rabbitMQProperties.getQueueName(), true);
     }
 
     @Bean
     public Binding binding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+        return BindingBuilder.bind(queue).to(exchange)
+                .with(rabbitMQProperties.getRoutingKey());
     }
 }
