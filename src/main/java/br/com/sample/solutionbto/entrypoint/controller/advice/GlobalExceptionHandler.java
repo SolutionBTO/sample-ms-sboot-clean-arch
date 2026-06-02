@@ -1,5 +1,6 @@
 package br.com.sample.solutionbto.entrypoint.controller.advice;
 
+import br.com.sample.solutionbto.core.usecase.exception.ConsultaSemResultadoException;
 import br.com.sample.solutionbto.entrypoint.controller.advice.dto.ErrorResponseDto;
 import feign.FeignException;
 import org.slf4j.Logger;
@@ -128,5 +129,22 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.valueOf(ex.status()));
+    }
+
+    @ExceptionHandler(ConsultaSemResultadoException.class)
+    public ResponseEntity<ErrorResponseDto> handleConsultaSemResultadoException(
+            ConsultaSemResultadoException ex, WebRequest request) {
+
+        log.warn("Consulta sem resultado: {}", ex.getMessage());
+
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NO_CONTENT.value())
+                .error(ex.getMessage())
+                .message(ex.getMessage())
+                .path(request.getDescription(false).replace("uri=", ""))
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.NO_CONTENT);
     }
 }

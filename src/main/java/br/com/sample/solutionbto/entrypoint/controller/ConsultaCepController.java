@@ -1,6 +1,6 @@
 package br.com.sample.solutionbto.entrypoint.controller;
 
-import br.com.sample.solutionbto.core.usecase.ConsultaCepUsecase;
+import br.com.sample.solutionbto.core.usecase.BuscarEnderecoUsecase;
 import br.com.sample.solutionbto.entrypoint.controller.mapper.EnderecoCompletoDtoMapper;
 import br.com.sample.solutionbto.openapi.api.ConsultaCepApi;
 import br.com.sample.solutionbto.openapi.model.EnderecoCompletoDto;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ConsultaCepController implements ConsultaCepApi {
 
-    private final ConsultaCepUsecase usecase;
+    private final BuscarEnderecoUsecase usecase;
     private final EnderecoCompletoDtoMapper mapper;
 
     @Override
@@ -28,7 +28,6 @@ public class ConsultaCepController implements ConsultaCepApi {
         var endereco = usecase.consultaCep(cep);
 
         return Optional.ofNullable(endereco)
-                            .filter(e -> e.getErro() == null || !e.getErro())
                             .map(mapper::map)
                             .map(ResponseEntity::ok)
                             .orElse(ResponseEntity.noContent().build());

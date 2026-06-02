@@ -2,7 +2,7 @@ package br.com.sample.solutionbto.core.usecase;
 
 import br.com.sample.solutionbto.core.domain.EnderecoCompletoDomain;
 
-public interface IncluirEnderecoCompletoUsecase {
+public interface IncluirEnderecoUsecase {
 
     void persistir(EnderecoCompletoDomain enderecoCompletoDomain);
 }

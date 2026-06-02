@@ -1,10 +1,10 @@
-package br.com.sample.solutionbto.core.dataprovider;
+package br.com.sample.solutionbto.core.usecase;
 
 import br.com.sample.solutionbto.core.domain.EnderecoCompletoDomain;
 
 import java.util.List;
 
-public interface ConsultaViaCep {
+public interface BuscarEnderecoUsecase {
 
     EnderecoCompletoDomain consultaCep(String cep);
 

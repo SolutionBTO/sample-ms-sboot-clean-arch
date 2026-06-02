@@ -1,6 +1,6 @@
 package br.com.sample.solutionbto.dataprovider.impl;
 
-import br.com.sample.solutionbto.core.dataprovider.IncluirEnderecoCompleto;
+import br.com.sample.solutionbto.core.dataprovider.IncluirEndereco;
 import br.com.sample.solutionbto.core.domain.EnderecoCompletoDomain;
 import br.com.sample.solutionbto.dataprovider.mapper.EnderecoCompletoDocumentMapper;
 import br.com.sample.solutionbto.dataprovider.mongodb.repository.EnderecoCompletoRepository;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class IncluirEnderecoCompletoImpl implements IncluirEnderecoCompleto {
+public class IncluirEnderecoImpl implements IncluirEndereco {
 
     private final EnderecoCompletoRepository repository;
     private final EnderecoCompletoDocumentMapper mapper;

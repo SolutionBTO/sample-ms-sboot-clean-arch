@@ -1,6 +1,6 @@
 package br.com.sample.solutionbto.entrypoint.listener;
 
-import br.com.sample.solutionbto.core.usecase.IncluirEnderecoCompletoUsecase;
+import br.com.sample.solutionbto.core.usecase.IncluirEnderecoUsecase;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 public class CadastroCepListener {
 
     private final ObjectMapper objectMapper;
-    private final IncluirEnderecoCompletoUsecase usecase;
+    private final IncluirEnderecoUsecase usecase;
 
     @RabbitListener(queues = "${app.rabbitmq.queue-name}", concurrency = "1-5")
     public void receiveMessage(Message message) throws JsonProcessingException {

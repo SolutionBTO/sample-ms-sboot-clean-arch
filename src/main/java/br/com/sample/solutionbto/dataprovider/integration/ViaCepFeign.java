@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(value = "via-cep", dismiss404 = true, configuration = ViaCepConfiguration.class)
+@FeignClient(value = "via-cep", dismiss404 = true, configuration = { ViaCepConfiguration.class })
 public interface ViaCepFeign  extends ViaCepClientApi {
 
 
