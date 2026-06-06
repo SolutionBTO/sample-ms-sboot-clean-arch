@@ -1,5 +1,6 @@
 package br.com.sample.solutionbto.dataprovider.impl;
 
+import br.com.sample.solutionbto.common.CacheManagerConstants;
 import br.com.sample.solutionbto.common.util.StringUtils;
 import br.com.sample.solutionbto.core.dataprovider.BuscarEndereco;
 import br.com.sample.solutionbto.core.domain.EnderecoCompletoDomain;
@@ -24,7 +25,11 @@ public class BuscarEnderecoImpl implements BuscarEndereco {
     private final EnderecoCompletoDocumentMapper mapper;
     private final EnderecoCompletoDomainMapper mapperDomain;
 
-    @Cacheable(value = "consultaCepCache", key = "#cep")
+    @Cacheable(
+            cacheManager = CacheManagerConstants.CACHE_MANAGER_CEP,
+            value = CacheManagerConstants.CACHE_NAME_CONSULTA_CEP,
+            key = "#cep",
+            unless = "#result == null")
     @Override
     public EnderecoCompletoDomain consultaCep(String cep) {
         var enderecoDocument = repository.findByCep(cep);
@@ -47,7 +52,11 @@ public class BuscarEnderecoImpl implements BuscarEndereco {
         return null;
     }
 
-    @Cacheable(value = "pesquisaCepPorEnderecoCache", key = "{#uf, #localidade, #logradouro}")
+    @Cacheable(
+            cacheManager = CacheManagerConstants.CACHE_MANAGER_CEP,
+            value = CacheManagerConstants.CACHE_NAME_PESQUISA_CEP,
+            key = "{#uf, #localidade, #logradouro}",
+            unless = "#result == null || #result.isEmpty()")
     @Override
     public List<EnderecoCompletoDomain> pesquisaCepPorEndereco(String uf, String localidade, String logradouro) {
         var listaEnderecos = repository.findByUfAndLocalidadeAndLogradouro(uf, localidade, logradouro);

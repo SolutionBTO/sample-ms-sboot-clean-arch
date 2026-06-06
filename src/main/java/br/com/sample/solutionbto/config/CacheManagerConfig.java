@@ -1,5 +1,6 @@
 package br.com.sample.solutionbto.config;
 
+import br.com.sample.solutionbto.common.CacheManagerConstants;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class CacheManagerConfig {
 
     // Caffeine Cache Manager - Local in-memory caching
-    @Bean
+    @Bean(CacheManagerConstants.CACHE_MANAGER_CEP)
     @ConditionalOnProperty(name = "app.cache.type", havingValue = "caffeine", matchIfMissing = true)
     public CacheManager caffeineCacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
@@ -30,7 +31,7 @@ public class CacheManagerConfig {
     }
 
     // Redis Cache Manager - Distributed caching
-    @Bean
+    @Bean(CacheManagerConstants.CACHE_MANAGER_CEP)
     @Primary
     @ConditionalOnProperty(name = "app.cache.type", havingValue = "redis")
     public CacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {
