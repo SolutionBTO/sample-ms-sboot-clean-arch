@@ -1,0 +1,17 @@
+{
+  "bairro": "Sé",
+  "cep": "01001000",
+  "complemento": "lado ímpar",
+  "dadoComplementares": {
+    "ddd": "11",
+    "gia": "1004",
+    "ibge": "3550308",
+    "siafi": "7107"
+  },
+  "estado": "São Paulo",
+  "localidade": "São Paulo",
+  "logradouro": "Praça da Sé",
+  "regiao": "Sudeste",
+  "uf": "SP",
+  "unidade": ""
+}

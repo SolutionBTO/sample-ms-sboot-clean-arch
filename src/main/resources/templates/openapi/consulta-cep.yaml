@@ -28,19 +28,20 @@ paths:
             example: '01001000'
       responses:
         '200':
-          description: "Operação bem-sucedida. Nota: Caso o CEP possua formato válido mas não exista, a resposta virá com um corpo contendo `{\"erro\": true}`."
+          description: "Operação bem-sucedida."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/EnderecoCompletoDto'
-        '204':
-          description: "Sem conteúdo."
+        '404':
+          description: "Não encontrado. Nota: Caso o CEP possua formato válido mas não exista, a resposta virá com um corpo contendo `\"erroCepNaoEncontrado\":{..}`."
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErroCepNaoEncontrado'
+                $ref: '#/components/schemas/EnderecoCompletoDto'
         '400':
           description: "Bad Request. O CEP informado possui formato inválido (ex: alfanumérico, quantidade incorreta de caracteres)."
+
   /consulta-cep/uf/{uf}/municipio/{localidade}/logradouro/{logradouro}:
     get:
       tags:
@@ -85,12 +86,9 @@ paths:
                   $ref: '#/components/schemas/EnderecoCompletoDto'
         '204':
           description: "Sem conteúdo."
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErroCepNaoEncontrado'
         '400':
           description: Bad Request. Ocorre quando a localidade ou logradouro possuem menos de 3 caracteres.
+
 components:
   schemas:
     EnderecoCompletoDto:
@@ -132,6 +130,26 @@ components:
           type: string
           description: Região geográfica do país.
           example: 'Sudeste'
+        dadoComplementares:
+          $ref: '#/components/schemas/DadosComplementaresDto'
+        erroCepNaoEncontrado:
+          $ref: '#/components/schemas/ErroCepNaoEncontradoDto'
+
+
+    ErroCepNaoEncontradoDto:
+      type: object
+      description: Resposta retornada quando o CEP pesquisado tem formato válido porém não existe na base de dados nacional.
+      properties:
+        codigo:
+          type: integer
+        descricao:
+          type: string
+          description: Mensagem de erro explicativa.
+          example: "CEP não encontrado."
+
+    DadosComplementaresDto:
+      type: object
+      properties:
         ibge:
           type: string
           description: Código identificador do município no IBGE (7 dígitos).
@@ -148,15 +166,3 @@ components:
           type: string
           description: Código do município no Sistema Integrado de Administração Financeira do Governo Federal.
           example: '7107'
-        erro:
-          type: boolean
-          example: true
-
-    ErroCepNaoEncontrado:
-      type: object
-      description: Resposta retornada quando o CEP pesquisado tem formato válido porém não existe na base de dados nacional.
-      properties:
-        descricao:
-          type: string
-          description: Mensagem de erro explicativa.
-          example: "CEP não encontrado."

@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/ws/SP/São%20Paulo/Avenida%20Paulista/json"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Accept": "application/json"
+    },
+    "bodyFileName": "response-pesquisa-cep.json"
+  }
+}

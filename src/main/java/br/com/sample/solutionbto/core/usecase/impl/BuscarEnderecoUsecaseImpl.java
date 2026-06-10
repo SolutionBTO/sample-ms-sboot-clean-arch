@@ -3,6 +3,7 @@ package br.com.sample.solutionbto.core.usecase.impl;
 import br.com.sample.solutionbto.core.dataprovider.BuscarEndereco;
 import br.com.sample.solutionbto.core.domain.EnderecoCompletoDomain;
 import br.com.sample.solutionbto.core.usecase.BuscarEnderecoUsecase;
+import br.com.sample.solutionbto.core.usecase.exception.CepInvalidoException;
 import br.com.sample.solutionbto.core.usecase.exception.PesquisaPorEnderecoIlegalArgsException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +19,9 @@ public class BuscarEnderecoUsecaseImpl implements BuscarEnderecoUsecase {
 
     @Override
     public EnderecoCompletoDomain consultaCep(String cep) {
+        if(StringUtils.isEmpty(cep) || !cep.matches("\\d{8}"))
+            throw new CepInvalidoException(cep);
+
         return buscarEndereco.consultaCep(cep);
     }
 

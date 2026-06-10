@@ -1,0 +1,16 @@
+{
+  "cep": null,
+  "logradouro": null,
+  "complemento": null,
+  "unidade": null,
+  "bairro": null,
+  "localidade": null,
+  "uf": null,
+  "estado": null,
+  "regiao": null,
+  "ibge": null,
+  "gia": null,
+  "ddd": null,
+  "siafi": null,
+  "erro" : true
+}

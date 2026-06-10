@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/ws/99999999/json"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Accept": "application/json"
+    },
+    "bodyFileName": "__file/response-erro-consulta-cep.json"
+  }
+}

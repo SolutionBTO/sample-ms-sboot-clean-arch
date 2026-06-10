@@ -1,0 +1,7 @@
+{
+  "dadoComplementares": {},
+  "erroCepNaoEncontrado": {
+    "codigo": 1,
+    "descricao": "CEP não encontrado!"
+  }
+}

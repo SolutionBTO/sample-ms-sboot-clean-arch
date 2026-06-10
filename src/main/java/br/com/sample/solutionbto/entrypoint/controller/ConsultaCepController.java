@@ -6,6 +6,7 @@ import br.com.sample.solutionbto.openapi.api.ConsultaCepApi;
 import br.com.sample.solutionbto.openapi.model.EnderecoCompletoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,8 @@ public class ConsultaCepController implements ConsultaCepApi {
 
         return Optional.ofNullable(endereco)
                             .map(mapper::map)
-                            .map(ResponseEntity::ok)
+                            .map(dto -> new ResponseEntity<>(dto, dto.getErroCepNaoEncontrado() == null ?
+                                                                            HttpStatus.OK : HttpStatus.NOT_FOUND))
                             .orElse(ResponseEntity.noContent().build());
     }
 

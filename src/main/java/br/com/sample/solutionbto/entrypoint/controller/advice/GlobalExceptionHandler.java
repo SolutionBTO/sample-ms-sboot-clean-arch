@@ -1,6 +1,6 @@
 package br.com.sample.solutionbto.entrypoint.controller.advice;
 
-import br.com.sample.solutionbto.core.usecase.exception.ConsultaSemResultadoException;
+import br.com.sample.solutionbto.core.usecase.exception.CepInvalidoException;
 import br.com.sample.solutionbto.entrypoint.controller.advice.dto.ErrorResponseDto;
 import feign.FeignException;
 import org.slf4j.Logger;
@@ -89,7 +89,7 @@ public class GlobalExceptionHandler {
         ErrorResponseDto error = ErrorResponseDto.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
-                .error("Illegal Argument")
+                .error("Argumento Ilegal!")
                 .message(ex.getMessage())
                 .path(request.getDescription(false).replace("uri=", ""))
                 .build();
@@ -131,15 +131,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.valueOf(ex.status()));
     }
 
-    @ExceptionHandler(ConsultaSemResultadoException.class)
+    @ExceptionHandler(CepInvalidoException.class)
     public ResponseEntity<ErrorResponseDto> handleConsultaSemResultadoException(
-            ConsultaSemResultadoException ex, WebRequest request) {
+            CepInvalidoException ex, WebRequest request) {
 
-        log.warn("Consulta sem resultado: {}", ex.getMessage());
+        log.warn("Cep invalid: {}", ex.getMessage());
 
         ErrorResponseDto error = ErrorResponseDto.builder()
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NO_CONTENT.value())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .error(ex.getMessage())
                 .message(ex.getMessage())
                 .path(request.getDescription(false).replace("uri=", ""))

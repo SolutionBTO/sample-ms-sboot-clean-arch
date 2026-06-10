@@ -4,7 +4,6 @@ import br.com.sample.solutionbto.common.CacheManagerConstants;
 import br.com.sample.solutionbto.common.util.StringUtils;
 import br.com.sample.solutionbto.core.dataprovider.BuscarEndereco;
 import br.com.sample.solutionbto.core.domain.EnderecoCompletoDomain;
-import br.com.sample.solutionbto.core.usecase.exception.ConsultaSemResultadoException;
 import br.com.sample.solutionbto.dataprovider.mapper.EnderecoCompletoDocumentMapper;
 import br.com.sample.solutionbto.dataprovider.integration.ViaCepFeign;
 import br.com.sample.solutionbto.dataprovider.mapper.EnderecoCompletoDomainMapper;
@@ -43,7 +42,13 @@ public class BuscarEnderecoImpl implements BuscarEndereco {
         if( responseEntity != null &&
                 responseEntity.getBody() != null &&
                     responseEntity.getStatusCode().is2xxSuccessful() ) {
-            verificaResponseComErro(responseEntity.getBody());
+
+            if (verificaResponseComErro(responseEntity.getBody())) {
+                return EnderecoCompletoDomain.builder()
+                                                    .erro(Boolean.TRUE)
+                                                .build();
+            }
+
             var enderecoDocumentMap = mapper.map(responseEntity.getBody());
             var enderecoPersistido = repository.save(enderecoDocumentMap);
             return mapper.map(enderecoPersistido);
@@ -73,9 +78,7 @@ public class BuscarEnderecoImpl implements BuscarEndereco {
         return mapperDomain.mapListClientDtoToDomain(enderecoCompletosDto.getBody());
     }
 
-    private static void verificaResponseComErro(EnderecoCompletoClientDto enderecoCompleto){
-        if (enderecoCompleto.getErro() != null && enderecoCompleto.getErro()) {
-            throw new ConsultaSemResultadoException();
-        }
+    private static boolean verificaResponseComErro(EnderecoCompletoClientDto enderecoCompleto){
+       return enderecoCompleto.getErro() != null && enderecoCompleto.getErro();
     }
 }
