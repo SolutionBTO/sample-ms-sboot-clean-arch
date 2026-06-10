@@ -1,10 +1,6 @@
 package br.com.sample.solutionbto.entrypoint.controller;
 
 import br.com.sample.solutionbto.App;
-import br.com.sample.solutionbto.core.dataprovider.BuscarEndereco;
-import br.com.sample.solutionbto.core.domain.EnderecoCompletoDomain;
-import br.com.sample.solutionbto.core.usecase.BuscarEnderecoUsecase;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.restassured.RestAssured;
@@ -13,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.junit.jupiter.api.*;
-import org.mockito.InjectMocks;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,33 +16,24 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.util.ResourceUtils;
 import org.wiremock.spring.ConfigureWireMock;
 import org.wiremock.spring.EnableWireMock;
 import org.wiremock.spring.InjectWireMock;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import static io.restassured.RestAssured.given;
-import static org.mockito.Mockito.when;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.MethodName.class)
 @ContextConfiguration(classes = App.class)
-@EnableWireMock({
+@EnableWireMock({ // TODO mudar lib!
         @ConfigureWireMock(
                 name = "viacep",
                 port = 0),
@@ -61,13 +47,6 @@ class ConsultaCepControllerTest {
 
     @LocalServerPort
     private int port;
-
-    /*
-    @InjectMocks
-    private BuscarEnderecoUsecase buscarEnderecoUsecase;
-
-    @MockitoBean
-    private BuscarEndereco buscarEndereco;*/
 
     @Autowired
     ObjectMapper objectMapper;
@@ -120,6 +99,8 @@ class ConsultaCepControllerTest {
 
         JSONAssert.assertEquals(responseEsperado, responseRetornado, false);
     }
+
+    // TODO criar restantes dos testes
 
     private static String callRestAssurence(String url, Map<String, Object> params){
         return callRestAssurence(url, params, 200, true);
