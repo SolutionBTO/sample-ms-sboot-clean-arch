@@ -40,7 +40,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 })
 @ActiveProfiles("test")
 @DisplayName("ConsultaCepController")
-class ConsultaCepControllerTest {
+class ConsultaCepControllerIT {
 
     @InjectWireMock("viacep")
     WireMockServer mockCepService;
